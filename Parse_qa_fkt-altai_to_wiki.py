@@ -92,26 +92,28 @@ for data_block in soup.find_all('div', 'block'):
 					print ("break")
 					break
 				
-				start = True
+				is_time_added = False
 				for content_span in par.find_all('span'):
 					content = content_span.string
 					if (content != "" and content != None):
 						internal_content_span = content_span.find('span')
-						if (internal_content_span == None):
-							close_br = False
-							if (start):
-								# Время добавляем дважды, для ссылок
-								time = content.split(":")
-								if (len(time) == 3):
-									cur_hronometrazh += '[[' + yout_link
-									cur_hronometrazh += time[0] + "h" + time[1] + "m" + time[2] + "s "
-									
-									close_br = True
-								start = False
-								
-							cur_hronometrazh += content
-							if (close_br):
+						is_last_span = internal_content_span == None
+
+						internal_content_strong = par.find('strong')
+						is_strong = internal_content_strong != None and internal_content_strong.string != None
+						
+						if is_strong and not is_time_added:
+							time = internal_content_strong.string.split(":")
+							if (len(time) == 3):
+								cur_hronometrazh += '[[' + yout_link
+								cur_hronometrazh += time[0] + "h" + time[1] + "m" + time[2] + "s"
+								cur_hronometrazh += " " + time[0] + ":" + time[1] + ":" + time[2]
 								cur_hronometrazh += ']]'
+								
+								is_time_added = True
+						
+						if is_last_span and len(content.split(":")) != 3:
+							cur_hronometrazh += content
 							
 				if (cur_hronometrazh == ""):
 					continue
@@ -125,3 +127,10 @@ for data_block in soup.find_all('div', 'block'):
 			
 			out_file.write(hronometrazh.encode('utf-8', errors='ignore'))
 			out_file.close()
+
+
+
+#<p style="text-align:justify"><span style="font-size:14px"><span style="font-family:verdana,geneva,sans-serif"><span style="font-size:12px"><a href="https://youtu.be/m8Ux0bac4Vs?t=24" style="text-decoration-line: none;"><strong>00:00:24</strong></a></span><span style="background-color:transparent; color:rgb(0, 0, 0)"> Действительно ли к Мавзолею были брошены власовские флаги во время Парада Победы в июне 1945 года. Кто такой власовец. О власовских флагах. О списке трофейных знамён, отобранных на Парад Победы, утверждённый 21 июня 1945 года.</span></span></span></p>
+#<p style="text-align:justify"><span style="font-size:14px"><span style="font-family:verdana,geneva,sans-serif"><a href="https://youtu.be/ViQ8vEcxqSM?t=88" style="text-decoration-line: none;"><strong>00:01:28</strong></a><span style="background-color:transparent; color:rgb(0, 0, 0)">&nbsp;Важность проведения Парада Победы в России. О предложении вместо проведения Парада раздать деньги нуждающимся. Какие цели в отношении России преследовали Первая и Вторая мiровые войны. Триколор в истории России</span></span></span></p>
+
+
