@@ -20,5 +20,5 @@
 Ссылка wiki
 -----------
         
-        https://alexwiki.isp.regruhosting.ru/index.php?title=Пякин_В._В._Вопрос-Ответ_Хронометраж
+        https://wiki.akfp.ru/index.php?title=Пякин_В._В._Вопрос-Ответ_Хронометраж
         https://wiki-kob.ru/Хронометраж:Пякин_В._В._Вопрос-Ответ
