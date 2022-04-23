@@ -18,7 +18,7 @@ def GetStrong(a_Par):
 	return ""
 
 # Исходный адрес сайта
-url_site = 'fct-altai.ru'
+url_site = 'fct-altai.ru' # 'xn----8sba0bbi0cdm.xn--p1ai' # 'фкт-алтай.рф'
 base_url_wos = 'https://' + url_site 
 base_url = base_url_wos + '/'
 
@@ -127,6 +127,12 @@ for data_block in soup.find_all('div', 'block'):
 			
 			out_file.write(hronometrazh.encode('utf-8', errors='ignore'))
 			out_file.close()
+			
+			# Выходной файл единый
+			out_all_in_one_file = open('all_in_one.txt', 'a')
+			out_all_in_one_file.write(hronometrazh.encode('utf-8', errors='ignore'))
+			out_all_in_one_file.close()
+
 
 
 
