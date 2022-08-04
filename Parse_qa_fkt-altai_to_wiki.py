@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 # Copyright © 2020 Alexei Bezborodov. Contacts: <AlexeiBv+fkt_py@narod.ru>
 # License: Public domain: http://unlicense.org/
 
 from bs4 import BeautifulSoup
-from urllib2 import urlopen
+from urllib.request import urlopen
 
 import os; import locale;  os.environ["PYTHONIOENCODING"] = "utf-8";  myLocale=locale.setlocale(category=locale.LC_ALL, locale="ru_RU.UTF-8");
 
@@ -23,12 +21,12 @@ base_url_wos = 'https://' + url_site
 base_url = base_url_wos + '/'
 
 html_doc = urlopen(base_url).read()
-soup = BeautifulSoup(html_doc,from_encoding="utf-8")
+soup = BeautifulSoup(html_doc, from_encoding = "utf-8")
 
 # Блоки на офф сайте
 for data_block in soup.find_all('div', 'block'):
-    data_key = data_block.get('data-key')
-    for vo_block in data_block.find_all('a'):
+	data_key = data_block.get('data-key')
+	for vo_block in data_block.find_all('a'):
 		vo_url = vo_block.get('href')
 		
 		if (vo_url.find("qa") != -1 and vo_url.find(url_site) == -1):
@@ -41,7 +39,7 @@ for data_block in soup.find_all('div', 'block'):
 			  
 			# Считываем дату
 			h1 = soup_vo.find('h1');
-			print 'date:', h1
+			print('date:', h1)
 			
 			date = "";
 			if (h1):
@@ -49,7 +47,7 @@ for data_block in soup.find_all('div', 'block'):
 			
 			# Добавляем в конечный файл дату и ссылку на стенограмму
 			hronometrazh = "==" + date + "==\n"
-			hronometrazh += "[[" + vo_url + " стенограмма]]\n\n".decode('utf-8')
+			hronometrazh += "[[" + vo_url + " стенограмма]]\n\n" #.decode('utf-8')
 			
 			# Берём ссылку на ютюб
 			# пример того, что есть на сайте: <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/RmZvzSM5vRI?showinfo=0"
@@ -80,15 +78,15 @@ for data_block in soup.find_all('div', 'block'):
 				strong = GetStrong(par)
 				
 				if (strong):
-					print "strong:", strong
+					print("strong:", strong)
 					
 				# Параграф содержит надпись "Хронометраж:" - пропускаем
-				if (strong == "\xd0\xa5\xd1\x80\xd0\xbe\xd0\xbd\xd0\xbe\xd0\xbc\xd0\xb5\xd1\x82\xd1\x80\xd0\xb0\xd0\xb6\x3a".decode('utf-8')):
+				if (strong == "Хронометраж:"): # \xd0\xa5\xd1\x80\xd0\xbe\xd0\xbd\xd0\xbe\xd0\xbc\xd0\xb5\xd1\x82\xd1\x80\xd0\xb0\xd0\xb6\x3a  .decode('utf-8')
 					print ("continue")
 					continue
 				
 				# Параграф содержит надпись "Стенограмма:" - заканчиваем работу с текущим ВО
-				if (strong == "\xd0\xa1\xd1\x82\xd0\xb5\xd0\xbd\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb0\x3a".decode('utf-8')):
+				if (strong == "Стенограмма:"): #  \xd0\xa1\xd1\x82\xd0\xb5\xd0\xbd\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb0\x3a  .decode('utf-8')
 					print ("break")
 					break
 				
@@ -119,18 +117,18 @@ for data_block in soup.find_all('div', 'block'):
 					continue
 				
 				cur_hronometrazh += "\n"
-				print cur_hronometrazh
+				print(cur_hronometrazh)
 				
 				hronometrazh += "# " + cur_hronometrazh
 				
 			hronometrazh += "\n"
 			
-			out_file.write(hronometrazh.encode('utf-8', errors='ignore'))
+			out_file.write(hronometrazh) # .encode('utf-8', errors='ignore')
 			out_file.close()
 			
 			# Выходной файл единый
 			out_all_in_one_file = open('all_in_one.txt', 'a')
-			out_all_in_one_file.write(hronometrazh.encode('utf-8', errors='ignore'))
+			out_all_in_one_file.write(hronometrazh) # .encode('utf-8', errors='ignore')
 			out_all_in_one_file.close()
 
 
